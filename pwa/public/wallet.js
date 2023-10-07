@@ -11,6 +11,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import { ImmortalDB } from 'immortal-db';
+
 //Detect if window is a PWA
 function isPWA() { return Boolean((window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)|| window.navigator.standalone); }
 const db = ImmortalDB.ImmortalDB;
@@ -121,6 +123,6 @@ async function maintainJWT (newJWT) {
 
 //Begin Ethereum Wallet Transaction Listener
 window.addEventListener('message', message => {
-
+    
 
 });
