@@ -123,6 +123,8 @@ async function maintainJWT (newJWT) {
 
 //Begin Ethereum Wallet Transaction Listener
 window.addEventListener('message', message => {
-    
+    // when transaction event occurs
+
+    // verify user and wallet
 
 });

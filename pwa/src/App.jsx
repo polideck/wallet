@@ -6,8 +6,8 @@ import './App.css'
 
 // CookieStore -> keys and values are stored in document.cookie
 // IndexedDbStore -> keys and values are stored in window.indexedDB
-// LocalStorageStore -> Keys and values are stored in window.localStorage
-// SessionStorageStore -> Keys and values are stored in window.sessionStorage
+// LocalStorageStore -> keys and values are stored in window.localStorage
+// SessionStorageStore -> keys and values are stored in window.sessionStorage
 
 // use cookie storage and local storage
 const stores = [await new CookieStore(), await new LocalStorageStore()];
@@ -16,12 +16,26 @@ const db = new ImmortalStorage(stores);
 function App() {
 
   const [keyData, setKeyData] = useState('');
-  const [valData, setValData] = useState('');
 
   // value can be json data
   // TODO: fetch JSON from cookies / localstorage and validate via JSON validation library
-  function setCookie(key, value) {
-    db.set(key, JSON.stringify({'jsonData':value}));
+  // once user wallet is verified, user info stored as cookie
+  // so they can proceed with application
+  const wallet = {
+    api: 'wallet',
+    op: 'getPublicAddr',
+    nonce: 3351783782,
+    res: 'ETHWALLETADDR'
+  }
+
+  const authenticatedUser = {
+    name: 'john smith',
+    guid: '12345',
+    wallet: wallet,
+  }
+
+  function setCookie(key) {
+    db.set(key, JSON.stringify(authenticatedUser));
   }
 
   function clearAllCookies() {
@@ -33,7 +47,6 @@ function App() {
       const equalsIndex = cookie.indexOf('=');
       keyToRemove = keyToRemove.slice(0,equalsIndex);
       keyToRemove = keyToRemove.slice(immortalPrefix + IMMORTAL_PREFIX_OFFSET);
-      console.log(keyToRemove);
       await db.remove(keyToRemove);
     })
   }
@@ -51,20 +64,16 @@ function App() {
       <h1>Vite + React</h1>
       <div className="card">
 
-        <input placeholder='Key Data' onChange={(e) => {
+        <input placeholder='Enter User Id' onChange={(e) => {
           setKeyData(e.target.value);
         }}/>
 
-        <input placeholder='Value Data' onChange={(e) => {
-          setValData(e.target.value);
-        }}/>
-
-        <button onClick={() => setCookie(keyData, valData)}>
-          Click me!
+        <button onClick={() => setCookie(keyData)}>
+          Click me, then check cookies
         </button>
 
         <button onClick={() => clearAllCookies()}>
-          Clear all Cookies
+          Clear all cookies
         </button>
 
       </div>
