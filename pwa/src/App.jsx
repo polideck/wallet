@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import { ImmortalDB, ImmortalStorage, CookieStore, LocalStorageStore } from 'immortal-db'
+import { ImmortalStorage, CookieStore, LocalStorageStore } from 'immortal-db'
 import './App.css'
 
 // CookieStore -> keys and values are stored in document.cookie
@@ -18,8 +18,10 @@ function App() {
   const [keyData, setKeyData] = useState('');
   const [valData, setValData] = useState('');
 
+  // value can be json data
+  // TODO: fetch JSON from cookies / localstorage and validate via JSON validation library
   function setCookie(key, value) {
-    db.set(key, value);
+    db.set(key, JSON.stringify({'jsonData':value}));
   }
 
   function clearAllCookies() {
