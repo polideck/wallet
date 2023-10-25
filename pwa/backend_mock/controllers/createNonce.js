@@ -1,4 +1,4 @@
-import Nonce from '../models/Nonce';
+import Nonce from '../models/Nonce.js';
 
 export default async function createNonce(nonceId, transactionId, nonce) {
     const exist = await Nonce.findOne({ nonceId })

@@ -1,6 +1,6 @@
 import express from 'express';
 // import Nonce from '../models/Nonce';
-import createNonce from './createNonce';
+import createNonce from './createNonce.js';
 const router = express.Router();
 
 router.post('/create', async (req, res) => {
