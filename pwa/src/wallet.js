@@ -11,6 +11,9 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import { ImmortalDB } from 'immortal-db';
+import { ethers } from 'ethers';
+
 //Detect if window is a PWA
 function isPWA() { return Boolean((window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)|| window.navigator.standalone); }
 const db = ImmortalDB.ImmortalDB;
@@ -65,7 +68,6 @@ function parseJwt(token) {
     } catch(err){
         console.error("JWT Parse Error: \n" + err);
     }
-    
 }
 //Checks if wallet should renew jwt
 function shouldRenew(jwt){
@@ -117,10 +119,10 @@ async function maintainJWT (newJWT) {
     }
 }
 
-
-
 //Begin Ethereum Wallet Transaction Listener
 window.addEventListener('message', message => {
-
+    // when transaction event occurs
+    console.log(message);
+    // verify user and wallet
 
 });
