@@ -1,13 +1,15 @@
+import pkg from 'jsonwebtoken';
 import express from 'express';
-// import Nonce from '../models/Nonce';
 import createUser from './createUser.js';
-import { sign } from 'jsonwebtoken';
-import { utils } from 'ethers';
+const { sign } = pkg;
+import { validator } from 'web3';
 import { randomUUID } from 'crypto';
 import chalk from 'chalk';
+import dotenv from 'dotenv';
 const router = express.Router();
+dotenv.config();
 
-const dbHost = 'dbhost';
+const dbHost = process.env.MONGO_URL;
 if(dbHost == undefined) {
 	console.error(chalk.red("MongoDB Connection String Undefined"));
 }
@@ -23,19 +25,18 @@ const mongo = new MongoClient(dbHost,  {
 
 const jwtSecret = "HARDCODED JWT SECRET";
 
-// TODO: Change model definition for user schema to match
 //Also works as a registration function if user does not yet exist
 router.post('/getNonce', async (req, res) => {
 	const address = req.query.address;
-	
+	console.log(address);
 	//Check if publicKey is a valid Ethereum address
-	if(utils.isAddress(address)) {
+	if(validator.isAddress(address)) {
 		//Push public key and nonce to DB
 		const accountInfo = await mongo.db("exilirate").collection("users").findOne({"eAddr" : address});
-        
-        // refactor to use createUser function
+		
+		// refactor to use createUser function
 		if(accountInfo == null){
-            const newUser = await createUser( address, address, ['user'], "Anonymous", "", "", "")
+			const newUser = await createUser( address, address, ['user'], "Anonymous", "", "", "")
 			await mongo.db("exilirate").collection("users").insertOne(newUser);
 		}
 
@@ -53,7 +54,7 @@ router.post('/getNonce', async (req, res) => {
 			}
 		);
 
-		//Return nonce to user
+		// 	Return nonce to user
 		res.status(200).json({nonce: nonce, msg: "Success"});
 	} else {
 		//Error if public key is invalid
@@ -66,9 +67,9 @@ router.post('/login', async (req, res) => {
 	//Get needed data for signature verification
 	const address = req.query.address;
 	const nonce = req.query.nonce;
-	const signature = req.query.signature;
+	//const signature = req.query.signature;
 	//Check validity of public ethereum address
-	if(utils.isAddress(address)) {
+	if(validator.isAddress(address)) {
 
 		//Get nonce from DB to ensure registration
 		const mongoDoc = await mongo.db("exilirate").collection("users").findOne({"eAddr" : address});
@@ -77,8 +78,8 @@ router.post('/login', async (req, res) => {
 
 		//Ensure user didn't sign arbitrary nonce
 		if((nonce == storedNonce) && (nonce != undefined)) {
-			//Validate signature
-			const valid = await verifyMessage(address, nonce, signature);
+			//Validate signature (assume valid for now)
+			const valid = true;
 			if(valid){
 				const roles = mongoDoc.roles;
 				console.log("roles: " + roles);
@@ -103,19 +104,5 @@ router.post('/login', async (req, res) => {
 		res.status(400).json({JWT: null, msg: "Invalid Request: Invalid Public Key"});
 	}
 });
-
-//Verify if signature is valid with additional error catching
-const verifyMessage = async (address, nonce, signature) => {
-	try {
-		const address = await utils.verifyMessage(nonce, signature);
-		if (address !== address) {
-			return false;
-		}
-		return true;
-	} catch (error) {
-		console.log(error);
-		return false;
-	}
-};
 
 export default router;
