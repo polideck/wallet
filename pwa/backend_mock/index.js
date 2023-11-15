@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 // import mongoose from 'mongoose';
 const app = express();
 
@@ -11,12 +12,13 @@ app.use((req, res, next) => {
 	if (allowedOrigins.includes(origin)) {
 		res.setHeader('Access-Control-Allow-Origin', origin);
 	}
-
 	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
 	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 	res.header('Access-Control-Allow-Credentials', true);
 	return next();
 });
+
+app.use(cors());
 
 app.use('/api', router);
 
