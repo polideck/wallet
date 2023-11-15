@@ -127,22 +127,22 @@ function App() {
   // TODO: fetch JSON from cookies / localstorage and validate via JSON validation library
   // once user wallet is verified, user info stored as cookie
   // so they can proceed with application
-  const wallet = {
-    api: 'wallet',
-    op: 'getPublicAddr',
-    nonce: 3351783782,
-    res: 'ETHWALLETADDR'
-  }
+  // const wallet = {
+  //   api: 'wallet',
+  //   op: 'getPublicAddr',
+  //   nonce: 3351783782,
+  //   res: 'ETHWALLETADDR'
+  // }
 
-  const authenticatedUser = {
-    name: 'john smith',
-    guid: '12345',
-    wallet: wallet,
-  }
+  // const authenticatedUser = {
+  //   name: 'john smith',
+  //   guid: '12345',
+  //   wallet: wallet,
+  // }
 
-  function setCookie(key) {
-    db.set(key, JSON.stringify(authenticatedUser));
-  }
+  // function setCookie(key) {
+  //   db.set(key, JSON.stringify(authenticatedUser));
+  // }
 
   function clearAllCookies() {
     console.log(document.cookie);
@@ -177,7 +177,7 @@ function App() {
           Click me, then check cookies - WALLET
         </button>
 
-        <button onClick={() => setCookie(keyData)}>
+        <button onClick={() => {}}>
           Click me, then check cookies
         </button>
 

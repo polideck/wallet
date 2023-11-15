@@ -30,7 +30,7 @@ router.post('/getNonce', async (req, res) => {
 	const address = req.query.address;
 	console.log(address);
 	//Check if publicKey is a valid Ethereum address
-	if(validator.isAddress(address)) {
+	if(validator.isAddress(address, true)) {
 		//Push public key and nonce to DB
 		const accountInfo = await mongo.db("exilirate").collection("users").findOne({"eAddr" : address});
 		
@@ -78,7 +78,7 @@ router.post('/login', async (req, res) => {
 
 		//Ensure user didn't sign arbitrary nonce
 		if((nonce == storedNonce) && (nonce != undefined)) {
-			//Validate signature (assume valid for now)
+			//Validate signature (assume valid for now) - need to add function to check signature
 			const valid = true;
 			if(valid){
 				const roles = mongoDoc.roles;
@@ -90,18 +90,18 @@ router.post('/login', async (req, res) => {
 				}, jwtSecret, {expiresIn: "2h"})
 
 				//Return JWT to user
-				res.status(200).json({JWT: token, msg: "Success"});
+				res.status(200).json({jwt: token, msg: "Success"});
 			} else {
 				//Error if signature is invalid
-				res.status(400).json({JWT: null, msg: "Invalid Request: Invalid Signature"});
+				res.status(400).json({jwt: null, msg: "Invalid Request: Invalid Signature"});
 			}
 		} else {
 			//Error if nonce is invalid
-			res.status(400).json({JWT: null, msg: "Invalid Request: Invalid Nonce"});
+			res.status(400).json({jwt: null, msg: "Invalid Request: Invalid Nonce"});
 		}
 	} else {
 		//Error if public key is invalid
-		res.status(400).json({JWT: null, msg: "Invalid Request: Invalid Public Key"});
+		res.status(400).json({jwt: null, msg: "Invalid Request: Invalid Public Key"});
 	}
 });
 
