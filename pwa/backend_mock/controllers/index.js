@@ -28,7 +28,7 @@ const jwtSecret = "HARDCODED JWT SECRET";
 //Also works as a registration function if user does not yet exist
 router.post('/getNonce', async (req, res) => {
 	const address = req.query.address;
-	console.log(address);
+
 	//Check if publicKey is a valid Ethereum address
 	if(validator.isAddress(address, true)) {
 		//Push public key and nonce to DB
@@ -36,6 +36,7 @@ router.post('/getNonce', async (req, res) => {
 		
 		// refactor to use createUser function
 		if(accountInfo == null){
+			console.log('hello');
 			const newUser = await createUser( address, address, ['user'], "Anonymous", "", "", "")
 			await mongo.db("exilirate").collection("users").insertOne(newUser);
 		}
@@ -78,7 +79,7 @@ router.post('/login', async (req, res) => {
 
 		//Ensure user didn't sign arbitrary nonce
 		if((nonce == storedNonce) && (nonce != undefined)) {
-			//Validate signature (assume valid for now) - need to add function to check signature
+			//Validate signature (assume valid for now) - TODO: add function to check signature
 			const valid = true;
 			if(valid){
 				const roles = mongoDoc.roles;

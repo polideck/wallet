@@ -11,5 +11,5 @@ export default async function createUser(eAddr, username, roles, name, bio, pfp,
         pfp : pfp,
         nonce : nonce 
     })
-    return newUser
+    return newUser;
 }
