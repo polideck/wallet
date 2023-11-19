@@ -23,6 +23,7 @@
     "jest-cli": "^29.7.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.6.1",
+    "supertest": "^6.3.3",
     "web3": "^4.2.2",
     "web3-validator": "^2.0.3"
   },
